@@ -2,21 +2,28 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments :: head"></head>
 
-<body class="container">
+<body>
 
-<h1 th:text="${title}">Default Title</h1>
+<div th:replace="fragments :: page-header"></div>
 
-<nav th:replace="fragments :: navigation"></nav>
+<div class="container">
 
-<p th:unless="${categories} and ${categories.size()}">no categories :(</p>
+    <h1 th:text="${title}">Default Title</h1>
 
-<ul>
-    <li th:each="category : ${categories}" th:text="${category.name}"></li>
-</ul>
+    <nav class="nav">
+        <a class="nav-link" href="/ingredient/category/add">Add</a>
+        <a class="nav-link" href="/ingredient/category/remove">Remove</a>
+    </nav>
 
-<nav>
-    <a href="/ingredient/category/add">Add</a>
-</nav>
+    <p th:unless="${categories} and ${categories.size()}">There are currently no categories...</p>
+
+    <ul>
+        <li th:each="category : ${categories}" th:text="${category.name}"></li>
+    </ul>
+
+
+
+</div>
 
 </body>
 </html>
