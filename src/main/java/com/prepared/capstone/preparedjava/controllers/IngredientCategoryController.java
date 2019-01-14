@@ -2,14 +2,12 @@ package com.prepared.capstone.preparedjava.controllers;
 
 import com.prepared.capstone.preparedjava.models.IngredientCategory;
 import com.prepared.capstone.preparedjava.models.data.IngredientCategoryDao;
+import com.prepared.capstone.preparedjava.models.forms.EditIngredientCategoryForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -62,5 +60,33 @@ public class IngredientCategoryController {
         categoryDao.delete(categoryId);
 
         return "redirect:";
+    }
+
+    @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
+    public String edit(Model model, @PathVariable("id") int id) {
+
+        IngredientCategory category = categoryDao.findOne(id);
+
+        EditIngredientCategoryForm form = new EditIngredientCategoryForm(category);
+
+        model.addAttribute("title", "Edit Category: " + category.getName());
+        model.addAttribute("form", form);
+
+        return "ingredient-category/edit";
+    }
+
+    @RequestMapping(value = "edit", method = RequestMethod.POST)
+    public String editCategory( Model model, @ModelAttribute @Valid EditIngredientCategoryForm form,
+                                        Errors errors) {
+
+        if (errors.hasErrors()) {
+            model.addAttribute("form", form);
+            return "ingredient-category/edit";
+        }
+
+        IngredientCategory category = categoryDao.findOne(form.getCategoryId());
+        category.setName(form.getName());
+        categoryDao.save(category);
+        return "redirect:/ingredient/category";
     }
 }

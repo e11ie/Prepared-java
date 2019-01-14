@@ -14,7 +14,7 @@ public class IngredientCategory {
     private int id;
 
     @NotNull
-    @Size(min=3, max=15)
+    @Size(min=3, max=60)
     private String name;
 
     @OneToMany
