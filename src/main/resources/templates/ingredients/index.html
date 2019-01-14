@@ -19,7 +19,11 @@
 
     <ul class="list-group list-group-flush">
         <li class="list-group-item d-flex justify-content-between" th:each="ingredient : ${ingredients}">
-            <span th:text="${ingredient.name}"></span>
+            <span>
+                <span th:text="${ingredient.name}"></span>
+                <span class="badge badge-secondary text-wrap" th:text="${ingredient.category.name}"></span>
+            </span>
+
             <a class="btn btn-sm btn-outline-primary" th:href="@{/ingredient/edit/} + ${ingredient.id}">Edit</a>
         </li>
     </ul>

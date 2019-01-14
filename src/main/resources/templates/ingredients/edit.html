@@ -9,24 +9,28 @@
 
     <h1 th:text="${title}">Default Title</h1>
 
-    <form method="post" style="max-width:600px;" th:object="${form}">
+    <form method="post" style="max-width:600px;" th:object="${form}" action="/ingredient/edit">
         <div class="form-group">
             <label th:for="name">Name</label>
-            <input class="form-control" th:field="*{name}" />
+            <input class="form-control" th:field="*{name}" th:value="*{name}" />
             <span th:errors="*{name}" class="error"></span>
         </div>
 
         <div class="form-group">
             <label th:for="categoryId">Category</label>
-            <select name="categoryId">
+            <select name="categoryId"><!--<tr th:class="${row.even}? 'even' : 'odd'"></tr>-->
                 <option th:each="category : *{categories}"
+                        th:selected="*{categoryId}== ${category.id}? 'selected'"
                         th:text="${category.name}"
                         th:value="${category.id}"></option>
             </select>
             <span th:errors="*{categories}" class="error"></span>
         </div>
 
-        <input class="btn btn-primary" type="submit" value="Add" />
+        <input type="hidden" name="ingredientId" th:value="*{ingredient.id}" />
+        <span th:errors="*{ingredient.id}" class="error"></span>
+
+        <input class="btn btn-primary" type="submit" value="Save Changes" />
     </form>
 </div>
 </body>

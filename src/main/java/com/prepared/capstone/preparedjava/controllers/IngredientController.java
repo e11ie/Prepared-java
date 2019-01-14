@@ -2,15 +2,16 @@ package com.prepared.capstone.preparedjava.controllers;
 
 
 import com.prepared.capstone.preparedjava.models.Ingredient;
+import com.prepared.capstone.preparedjava.models.IngredientCategory;
+import com.prepared.capstone.preparedjava.models.data.IngredientCategoryDao;
 import com.prepared.capstone.preparedjava.models.data.IngredientDao;
+import com.prepared.capstone.preparedjava.models.forms.AddIngredientForm;
+import com.prepared.capstone.preparedjava.models.forms.EditIngredientForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -20,6 +21,9 @@ public class IngredientController {
 
     @Autowired
     private IngredientDao ingredientDao;
+
+    @Autowired
+    private IngredientCategoryDao ingredientCategoryDao;
 
     @RequestMapping(value = "")
     public String index(Model model) {
@@ -32,20 +36,25 @@ public class IngredientController {
 
     @RequestMapping(value = "add", method = RequestMethod.GET)
     public String add(Model model) {
-        model.addAttribute("title", "Add Category");
-        model.addAttribute("ingredient", new Ingredient());
+
+        AddIngredientForm form = new AddIngredientForm(ingredientCategoryDao.findAll());
+
+        model.addAttribute("title", "Add Ingredient");
+        model.addAttribute("form", form);
         return "ingredients/add";
     }
 
     @RequestMapping(value = "add", method = RequestMethod.POST)
     public String add (Model model,
-                       @ModelAttribute @Valid Ingredient newIngredient, Errors errors) {
+                       @ModelAttribute @Valid AddIngredientForm form, Errors errors) {
 
         if (errors.hasErrors()) {
-            model.addAttribute("title", "Add Ingredient");
+            model.addAttribute("form", form);
             return "ingredients/add";
         }
 
+        Ingredient newIngredient = new Ingredient(form.getName());
+        newIngredient.setCategory(ingredientCategoryDao.findOne(form.getCategoryId()));
         ingredientDao.save(newIngredient);
         return "redirect:";
     }
@@ -63,5 +72,37 @@ public class IngredientController {
         ingredientDao.delete(ingredientId);
 
         return "redirect:";
+    }
+
+    @RequestMapping(value = "edit/{id}", method = RequestMethod.GET)
+    public String edit(Model model, @PathVariable("id") int id) {
+
+        Ingredient ingredient = ingredientDao.findOne(id);
+        Iterable<IngredientCategory> categories = ingredientCategoryDao.findAll();
+
+        EditIngredientForm form = new EditIngredientForm(categories, ingredient);
+        form.setName(ingredient.getName());
+        form.setCategoryId(ingredient.getCategory().getId());
+
+        model.addAttribute("title", "Edit Ingredient: " + ingredient.getName());
+        model.addAttribute("form", form);
+
+        return "ingredients/edit";
+    }
+
+    @RequestMapping(value = "edit", method = RequestMethod.POST)
+    public String editIngredient( Model model, @ModelAttribute @Valid EditIngredientForm form,
+                                Errors errors) {
+
+        if (errors.hasErrors()) {
+            model.addAttribute("form", form);
+            return "ingredients/edit";
+        }
+
+        Ingredient ingredient = ingredientDao.findOne(form.getIngredientId());
+        ingredient.setName(form.getName());
+        ingredient.setCategory(ingredientCategoryDao.findOne(form.getCategoryId()));
+        ingredientDao.save(ingredient);
+        return "redirect:/ingredient";
     }
 }
