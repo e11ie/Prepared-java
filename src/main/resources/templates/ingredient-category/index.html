@@ -11,8 +11,8 @@
     <h1 th:text="${title}">Default Title</h1>
 
     <nav class="nav">
-        <a class="nav-link" th:href="@{/ingredient/category/add}">Add</a>
-        <a class="nav-link" th:href="@{/ingredient/category/remove}">Remove</a>
+        <a class="nav-link" th:href="@{/ingredients/category/add}">Add</a>
+        <a class="nav-link" th:href="@{/ingredients/category/remove}">Remove</a>
     </nav>
 
     <p th:unless="${categories} and ${categories.size()}">There are currently no categories...</p>
@@ -20,7 +20,7 @@
     <ul class="list-group list-group-flush">
         <li class="list-group-item d-flex justify-content-between" th:each="category : ${categories}">
             <span th:text="${category.name}"></span>
-            <a class="btn btn-sm btn-outline-primary" th:href="@{/ingredient/category/edit/} + ${category.id}">Edit</a>
+            <a class="btn btn-sm btn-outline-primary" th:href="@{/ingredients/category/edit/} + ${category.id}">Edit</a>
         </li>
     </ul>
 

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body>
+
+<div th:replace="fragments :: page-header"></div>
+
+<div class="container">
+
+    <h1 th:text="${title}">Default Title</h1>
+
+    <form method="post">
+
+        <div class="form-group">
+            <label th:for="unitId">Unit</label>
+            <select class="custom-select" name="unitId">
+                <option th:each="unit : ${units}" th:value="${unit.id}" th:text="${unit.name}"></option>
+            </select>
+        </div>
+
+        <input type="submit" class="btn btn-primary" value="Remove" />
+    </form>
+
+</div>
+</body>
+</html>

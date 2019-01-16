@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+
+<body>
+
+<div th:replace="fragments :: page-header"></div>
+
+<div class="container">
+
+    <h1 th:text="${title}">Default Title</h1>
+
+    <!-- TODO sort by measurement type -->
+
+    <nav class="nav">
+        <a class="nav-link" th:href="@{/units/add}">Add</a>
+        <a class="nav-link" th:href="@{/units/remove}">Remove</a>
+    </nav>
+
+    <p th:unless="${units} and ${units.size()}">There are currently no units...</p>
+
+    <ul class="list-group list-group-flush">
+        <li class="list-group-item d-flex justify-content-between" th:each="unit : ${units}">
+            <span>
+                <span th:text="${unit.name}"></span>
+                <span th:text="${unit.abbrev}? '(' + ${unit.abbrev} +'.)'"></span>
+                <span class="badge badge-secondary text-wrap" th:text="${unit.type.name}"></span>
+            </span>
+            <a class="btn btn-sm btn-outline-primary" th:href="@{/units/edit/} + ${unit.id}">Edit</a>
+        </li>
+    </ul>
+
+
+
+</div>
+
+</body>
+</html>

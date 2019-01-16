@@ -22,17 +22,13 @@ public class EditIngredientCategoryForm {
         this.category = category;
     }
 
-    public IngredientCategory getCategory() {
-        return category;
-    }
+    public IngredientCategory getCategory() { return category; }
 
     public void setCategory(IngredientCategory category) {
         this.category = category;
     }
 
-    public int getCategoryId() {
-        return categoryId;
-    }
+    public int getCategoryId() { return categoryId; }
 
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;

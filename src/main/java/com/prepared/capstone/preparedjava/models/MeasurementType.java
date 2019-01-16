@@ -7,23 +7,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-public class IngredientCategory {
+public class MeasurementType {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue // Together these mean that id is a unique key id
     private int id;
 
     @NotNull
-    @Size(min=3, max=60, message = "Must be between 3 and 60 characters")
+    @Size(min=1, max=60, message = "Name must not be empty")
     private String name;
 
     @OneToMany
-    @JoinColumn(name = "category_id")
-    private List<Ingredient> ingredients = new ArrayList<>();
+    @JoinColumn(name = "type_id")
+    private List<Unit> units = new ArrayList<>();
 
-    public IngredientCategory() {}
+    public MeasurementType() {}
 
-    public IngredientCategory(String name) {
+    public MeasurementType(String name) {
         this.name = name;
     }
 
@@ -33,7 +33,7 @@ public class IngredientCategory {
 
     public void setName(String name) { this.name = name; }
 
-    public List<Ingredient> getIngredients() { return ingredients; }
+    public List<Unit> getUnits() { return units; }
 
-    public void setIngredients(List<Ingredient> ingredients) { this.ingredients = ingredients; }
+    public void setUnits(List<Unit> units) { this.units = units; }
 }

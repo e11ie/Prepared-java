@@ -11,8 +11,8 @@
     <h1 th:text="${title}">Default Title</h1>
 
     <nav class="nav">
-        <a class="nav-link" href="/ingredient/add">Add</a>
-        <a class="nav-link" href="/ingredient/remove">Remove</a>
+        <a class="nav-link" href="/ingredients/add">Add</a>
+        <a class="nav-link" href="/ingredients/remove">Remove</a>
     </nav>
 
     <p th:unless="${ingredients} and ${ingredients.size()}">There are currently no ingredients...</p>
@@ -24,7 +24,7 @@
                 <span class="badge badge-secondary text-wrap" th:text="${ingredient.category.name}"></span>
             </span>
 
-            <a class="btn btn-sm btn-outline-primary" th:href="@{/ingredient/edit/} + ${ingredient.id}">Edit</a>
+            <a class="btn btn-sm btn-outline-primary" th:href="@{/ingredients/edit/} + ${ingredient.id}">Edit</a>
         </li>
     </ul>
 

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org/">
+<head th:replace="fragments :: head"></head>
+<body>
+
+<div th:replace="fragments :: page-header"></div>
+
+<div class="container">
+
+    <h1 th:text="${title}">Default Title</h1>
+
+    <form method="post" style="max-width:600px;" th:object="${form}" action="/units/edit">
+        <div class="form-group">
+            <label th:for="name">Name</label>
+            <input class="form-control" th:field="*{name}" th:value="*{name}" />
+            <span th:errors="*{name}" class="error"></span>
+        </div>
+
+        <!-- TODO add optional abbrev but fix form error bug first -->
+
+        <!--<div class="form-group">-->
+        <!--<label th:for="abbrev">Abbreviation</label>-->
+        <!--<input class="form-control" th:field="*{abbrev}" />-->
+        <!--<span th:errors="*{abbrev}" class="error"></span>-->
+        <!--</div>-->
+
+        <div class="form-group">
+            <label th:for="typeId">Measurement Type</label>
+            <select name="typeId">
+                <option th:each="type : *{types}"
+                        th:text="${type.name}"
+                        th:selected="*{typeId}== ${type.id}? 'selected'"
+                        th:value="${type.id}"></option>
+            </select>
+            <span th:errors="*{types}" class="error"></span>
+        </div>
+
+        <input type="hidden" name="unitId" th:value="*{unit.id}" />
+        <span th:errors="*{unit.id}" class="error"></span>
+
+        <input class="btn btn-primary" type="submit" value="Save Changes" />
+    </form>
+</div>
+</body>
+</html>

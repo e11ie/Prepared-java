@@ -9,7 +9,7 @@
 
     <h1 th:text="${title}">Default Title</h1>
 
-    <form method="post" style="max-width:600px;" th:object="${form}" action="/ingredient/category/edit">
+    <form method="post" style="max-width:600px;" th:object="${form}" action="/ingredients/category/edit">
         <input type="hidden" name="categoryId" th:value="*{category.id}" />
         <span th:errors="*{category.id}" class="error"></span>
 

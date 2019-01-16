@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @Controller
-@RequestMapping(value="ingredient")
+@RequestMapping(value="ingredients")
 public class IngredientController {
 
     @Autowired
