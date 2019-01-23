@@ -103,6 +103,6 @@ public class IngredientController {
         ingredient.setName(form.getName());
         ingredient.setCategory(ingredientCategoryDao.findOne(form.getCategoryId()));
         ingredientDao.save(ingredient);
-        return "redirect:/ingredient";
+        return "redirect:/ingredients";
     }
 }
