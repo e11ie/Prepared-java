@@ -20,11 +20,14 @@
     <ul class="list-group list-group-flush">
         <li class="list-group-item d-flex justify-content-between" th:each="recipe : ${recipes}">
             <span>
-                <a th:href="@{/recipes/} + ${recipe.id}" th:text="${recipe.title}"></a>
+                <span th:text="${recipe.title}"></span>
                 <!--<span class="badge badge-secondary text-wrap" th:text="${recipe.tag.name}"></span>-->
             </span>
 
-            <a class="btn btn-sm btn-outline-primary" th:href="@{/recipes/edit/} + ${recipe.id}">Edit</a>
+            <span>
+                <a class="btn btn-sm btn-outline-primary" th:href="@{/recipes/view/} + ${recipe.id}">View</a>
+                <a class="btn btn-sm btn-outline-primary" th:href="@{/recipes/edit/} + ${recipe.id}">Edit Title</a>
+            </span>
         </li>
     </ul>
 
