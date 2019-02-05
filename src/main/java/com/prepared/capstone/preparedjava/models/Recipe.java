@@ -35,6 +35,16 @@ public class Recipe {
 
 
 
+    public void addIngredient(RecipeIngredient ingredient) {
+        recipeIngredients.add(ingredient);
+    }
+
+    public void addNote(RecipeNote note) {
+        recipeNotes.add(note);
+    }
+
+
+
     public int getId() { return id; }
 
     public String getTitle() { return title; }

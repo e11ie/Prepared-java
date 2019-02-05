@@ -14,7 +14,11 @@
     <p th:unless="${recipeIngredients} and ${recipeIngredients.size()}">no ingredients added yet :(</p>
 
     <ul>
-        <li th:each="recipeIngredient : ${recipeIngredients}" th:text="${recipeIngredient.ingredient}"></li>
+        <li th:each="recipeIngredient : ${recipeIngredients}">
+            <span th:text="${recipeIngredient.amount}"></span>
+            <span th:text="${recipeIngredient.unit.name}"></span>
+            <span th:text="${recipeIngredient.ingredient.name}"></span>
+        </li>
     </ul>
 
     <p><a th:href="'/recipes/add-ingredient/' + ${recipeId}">Add Ingredient</a></p>

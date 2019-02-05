@@ -1,7 +1,7 @@
 package com.prepared.capstone.preparedjava.models;
 
 import javax.persistence.*;
-import javax.validation.constraints.Min;
+import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.NotNull;
 
 @Entity
@@ -25,7 +25,7 @@ public class RecipeIngredient {
     private Unit unit;
 
     @NotNull
-    @Min(0)
+    @DecimalMin(value="0", inclusive=false)
     private double amount; // decimal
 
     private String prep;
@@ -34,10 +34,11 @@ public class RecipeIngredient {
 
     public RecipeIngredient() {}
 
-    public RecipeIngredient(double amount, Unit unit, Ingredient ingredient) {
+    public RecipeIngredient(double amount, Unit unit, Ingredient ingredient, Recipe recipe) {
         this.amount = amount;
         this.unit = unit;
         this.ingredient = ingredient;
+        this.recipe = recipe;
     }
 
 

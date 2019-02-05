@@ -1,9 +1,10 @@
 package com.prepared.capstone.preparedjava.controllers;
 
+import com.prepared.capstone.preparedjava.models.Ingredient;
 import com.prepared.capstone.preparedjava.models.Recipe;
-import com.prepared.capstone.preparedjava.models.data.RecipeDao;
-import com.prepared.capstone.preparedjava.models.data.RecipeIngredientDao;
-import com.prepared.capstone.preparedjava.models.data.RecipeNoteDao;
+import com.prepared.capstone.preparedjava.models.RecipeIngredient;
+import com.prepared.capstone.preparedjava.models.Unit;
+import com.prepared.capstone.preparedjava.models.data.*;
 import com.prepared.capstone.preparedjava.models.forms.AddRecipeIngredientForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,12 @@ public class RecipeController {
     @Autowired
     private RecipeIngredientDao recipeIngredientDao;
 
+    @Autowired
+    private UnitDao unitDao;
+
+    @Autowired
+    private IngredientDao ingredientDao;
+
     @RequestMapping(value = "")
     public String index(Model model) {
 
@@ -45,8 +52,9 @@ public class RecipeController {
         Recipe recipe =  recipeDao.findOne(id);
 
         model.addAttribute("title", "View Recipe: " + recipe.getTitle());
-//        model.addAttribute("cheeses", menu.getCheeses());
-//        model.addAttribute("menuId", menu.getId());
+        model.addAttribute("recipeIngredients", recipe.getRecipeIngredients());
+        model.addAttribute("recipeNotes", recipe.getRecipeNotes());
+        model.addAttribute("recipeId", recipe.getId());
 
         return "recipes/view";
     }
@@ -74,12 +82,52 @@ public class RecipeController {
         return "redirect:view/" + newRecipe.getId();
     }
 
+    // TODO - recipes/edit/{id}/add-ingredient
+    @RequestMapping(value = "add-ingredient/{id}", method = RequestMethod.GET)
+    public String addIngredient(Model model, @PathVariable("id") int id) {
+
+        Recipe recipe =  recipeDao.findOne(id);
+
+        AddRecipeIngredientForm form = new AddRecipeIngredientForm(unitDao.findAll(), ingredientDao.findAll(), recipe);
+
+        model.addAttribute("title", "Add Ingredient to Recipe: " + recipe.getTitle());
+        model.addAttribute("form", form);
+
+        return "recipes/add-ingredient";
+    }
+
+    @RequestMapping(value = "add-ingredient", method = RequestMethod.POST)
+    public String processAddRecipeIngredientForm( Model model, @ModelAttribute @Valid AddRecipeIngredientForm form,
+                                        Errors errors) {
+
+        if (errors.hasErrors()) {
+            model.addAttribute("form", form);
+            return "recipes/add-ingredient";
+        }
+
+        // create RecipeIngredient
+        Recipe recipe = recipeDao.findOne(form.getRecipeId());
+        Unit theUnit = unitDao.findOne(form.getUnitId());
+        Ingredient theIngredient = ingredientDao.findOne(form.getIngredientId());
+        RecipeIngredient newRecipeIngredient = new RecipeIngredient(
+                form.getAmount(),
+                theUnit,
+                theIngredient,
+                recipe
+        );
+        recipeIngredientDao.save(newRecipeIngredient);
+
+        // save it to Recipe
+        recipe.addIngredient(newRecipeIngredient);
+        recipeDao.save(recipe);
+        return "redirect:/recipes/view/" + recipe.getId();
+    }
+
 
 
     // TODO - recipes/delete
     // TODO - recipes/edit/{id} - edit Title
     // TODO - recipes/edit/{id}/add-note
-    // TODO - recipes/edit/{id}/add-ingredient
     // TODO - recipes/edit/{id}/delete-note
     // TODO - recipes/edit/{id}/delete-ingredient
     // TODO - recipes/edit/{id}/edit-note/{id}
