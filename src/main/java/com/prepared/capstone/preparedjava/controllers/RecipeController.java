@@ -132,4 +132,7 @@ public class RecipeController {
     // TODO - recipes/edit/{id}/delete-ingredient
     // TODO - recipes/edit/{id}/edit-note/{id}
     // TODO - recipes/edit/{id}/edit-ingredient/{id}
+
+    //TODO - disable submit button before validation
+    // TODO - TESTING! TESTING! TESTING! FIGURE OUT HOW TO!!!
 }

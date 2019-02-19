@@ -31,7 +31,7 @@ public class IngredientCategoryController {
     public String add(Model model) {
         model.addAttribute("title", "Add Category");
         model.addAttribute("category", new IngredientCategory());
-        model.addAttribute("stuff", "yo");
+//        model.addAttribute("stuff", "yo");
         return "ingredient-category/add";
     }
 
@@ -42,7 +42,7 @@ public class IngredientCategoryController {
 
         if (errors.hasErrors()) {
             model.addAttribute("title", "Add Category");
-            model.addAttribute("stuff", "yup. i made it to here.");
+//            model.addAttribute("stuff", "yup. i made it to here.");
             return "ingredient-category/add";
         }
 
