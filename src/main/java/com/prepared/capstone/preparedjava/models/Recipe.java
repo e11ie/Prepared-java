@@ -4,7 +4,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Recipe {
@@ -16,6 +18,14 @@ public class Recipe {
     @NotNull
     @Size(min=3, max=230, message = "Title must be between 3 and 230 characters in length")
     private String title;
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "recipe")
+    private Set<MealPlan> mealPlans = new HashSet<>();
 
     @OneToMany
     @JoinColumn(name = "recipe_id")
@@ -58,4 +68,8 @@ public class Recipe {
     public List<RecipeNote> getRecipeNotes() { return recipeNotes; }
 
     public void setRecipeNotes(List<RecipeNote> recipeNotes) { this.recipeNotes = recipeNotes; }
+
+    public Set<MealPlan> getMealPlans() { return mealPlans; }
+
+    public void setMealPlans(Set<MealPlan> mealPlans) { this.mealPlans = mealPlans; }
 }
