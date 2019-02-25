@@ -24,14 +24,14 @@ public class MealPlanController {
     @Autowired
     private MealPlanDao mealPlanDao;
 
-    @Autowired
-    private RecipeIngredientDao recipeIngredientDao;
-
-    @Autowired
-    private UnitDao unitDao;
-
-    @Autowired
-    private IngredientDao ingredientDao;
+//    @Autowired
+//    private RecipeIngredientDao recipeIngredientDao;
+//
+//    @Autowired
+//    private UnitDao unitDao;
+//
+//    @Autowired
+//    private IngredientDao ingredientDao;
 
     @RequestMapping(value = "all")
     public String index(Model model) {

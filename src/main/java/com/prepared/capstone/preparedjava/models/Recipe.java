@@ -19,12 +19,8 @@ public class Recipe {
     @Size(min=3, max=230, message = "Title must be between 3 and 230 characters in length")
     private String title;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            },
-            mappedBy = "recipe")
+    @ManyToMany(cascade = CascadeType.ALL,
+            mappedBy = "recipes")
     private Set<MealPlan> mealPlans = new HashSet<>();
 
     @OneToMany

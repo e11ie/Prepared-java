@@ -20,12 +20,8 @@ public class MealPlan {
     @Size(min=3, max=230, message = "Name must be between 3 and 230 characters in length")
     private String name;
 
-    @ManyToMany(fetch = FetchType.LAZY,
-            cascade = {
-                    CascadeType.PERSIST,
-                    CascadeType.MERGE
-            })
-    @JoinTable(name = "recipe",
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "mealplan_recipes",
             joinColumns = { @JoinColumn(name = "mealplan_id") },
             inverseJoinColumns = { @JoinColumn(name = "recipe_id") })
     private Set<Recipe> recipes = new HashSet<>();
