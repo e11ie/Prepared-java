@@ -11,26 +11,23 @@
     <h1 th:text="${title}">Default Title</h1>
 
 
-    <p th:unless="${recipeIngredients} and ${recipeIngredients.size()}">no ingredients added yet :(</p>
+    <p th:unless="${recipes} and ${recipes.size()}">no recipes added yet :(</p>
 
     <ul>
-        <li th:each="recipeIngredient : ${recipeIngredients}">
-            <span th:text="${recipeIngredient.amount}"></span>
-            <span th:text="${recipeIngredient.unit.name}"></span>
-            <span th:text="${recipeIngredient.ingredient.name}"></span>
+        <li th:each="recipe : ${recipes}">
+            <span th:text="${recipe.title}"></span>
+            <!--<span th:text="${recipeIngredient.ingredient.name}"></span>-->
+            <!--TODO: Add Ingredient Count for each recipe-->
         </li>
     </ul>
 
-    <p><a th:href="'/recipes/add-ingredient/' + ${recipeId}">Add Ingredient</a></p>
+    <p><a th:href="'/mealplan/add-recipe/' + ${mealplanId}">Add Recipe</a></p>
+    <p><a th:href="'/mealplan/add-recipe/' + ${mealplanId} + '/grocery-list'">View Grocery List</a></p>
 
 
-    <p th:unless="${recipeNotes} and ${recipeNotes.size()}">no notes added yet :(</p>
-
-    <ul>
-        <li th:each="recipeNote : ${recipeNotes}" th:text="${recipeNote.title}"></li>
-    </ul>
-
-    <p><a th:href="'/recipes/add-notes/' + ${recipeId}">Add Notes</a></p>
+    <!--TODO: Add  TOTAL Ingredient Count for ALL recipes-->
+    <!--TODO: Add  TOTAL Recipe Count-->
+    <!--TODO: Add view GroceryList-->
 
 </div>
 

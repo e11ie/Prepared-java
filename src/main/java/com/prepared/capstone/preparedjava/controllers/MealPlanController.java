@@ -2,6 +2,7 @@ package com.prepared.capstone.preparedjava.controllers;
 
 import com.prepared.capstone.preparedjava.models.*;
 import com.prepared.capstone.preparedjava.models.data.*;
+import com.prepared.capstone.preparedjava.models.forms.AddRecipeForm;
 import com.prepared.capstone.preparedjava.models.forms.AddRecipeIngredientForm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 
 @Controller
 @RequestMapping(value="mealplan")
@@ -43,82 +45,72 @@ public class MealPlanController {
     }
 
     // View one Recipe
-//    @RequestMapping(value = "view/{id}", method = RequestMethod.GET)
-//    public String viewRecipe(Model model, @PathVariable("id") int id) {
-//
-//        Recipe recipe =  recipeDao.findOne(id);
-//
-//        model.addAttribute("title", "View Recipe: " + recipe.getTitle());
-//        model.addAttribute("recipeIngredients", recipe.getRecipeIngredients());
-//        model.addAttribute("recipeNotes", recipe.getRecipeNotes());
-//        model.addAttribute("recipeId", recipe.getId());
-//
-//        return "mealplan/view";
-//    }
-//
+    @RequestMapping(value = "view/{id}", method = RequestMethod.GET)
+    public String viewMealPlan(Model model, @PathVariable("id") int id) {
+
+        MealPlan mealPlan =  mealPlanDao.findOne(id);
+
+        model.addAttribute("title", "View MealPlan: " + mealPlan.getName());
+        model.addAttribute("recipes", mealPlan.getRecipes());
+        model.addAttribute("mealplanId", mealPlan.getId());
+
+        return "mealplan/view";
+    }
+
     // Add Recipe
     @RequestMapping(value = "add", method = RequestMethod.GET)
     public String displayAddMealPlanForm(Model model) {
         model.addAttribute("title", "Add MealPlan");
-        model.addAttribute(new MealPlan());
+        model.addAttribute("mealplan", new MealPlan());
 
         return "mealplan/add";
     }
-//
-//    @RequestMapping(value = "add", method = RequestMethod.POST)
-//    public String processAddRecipeForm(@ModelAttribute @Valid Recipe newRecipe,
-//                                     Errors errors, Model model) {
-//
-//        if (errors.hasErrors()) {
-//            model.addAttribute("title", "Add Recipe");
-//            return "mealplan/add";
-//        }
-//
-//        recipeDao.save(newRecipe);
-//
-//        return "redirect:view/" + newRecipe.getId();
-//    }
-//
-//    // TODO - recipes/edit/{id}/add-recipe
-//    @RequestMapping(value = "add-recipe/{id}", method = RequestMethod.GET)
-//    public String addIngredient(Model model, @PathVariable("id") int id) {
-//
-//        Recipe recipe =  recipeDao.findOne(id);
-//
-//        AddRecipeIngredientForm form = new AddRecipeIngredientForm(unitDao.findAll(), ingredientDao.findAll(), recipe);
-//
-//        model.addAttribute("title", "Add Ingredient to Recipe: " + recipe.getTitle());
-//        model.addAttribute("form", form);
-//
-//        return "mealplan/add-recipe";
-//    }
-//
-//    @RequestMapping(value = "add-ingredient", method = RequestMethod.POST)
-//    public String processAddRecipeIngredientForm( Model model, @ModelAttribute @Valid AddRecipeIngredientForm form,
-//                                        Errors errors) {
-//
-//        if (errors.hasErrors()) {
-//            model.addAttribute("form", form);
-//            return "mealplan/add-recipe";
-//        }
-//
-//        // create RecipeIngredient
-//        Recipe recipe = recipeDao.findOne(form.getRecipeId());
-//        Unit theUnit = unitDao.findOne(form.getUnitId());
-//        Ingredient theIngredient = ingredientDao.findOne(form.getIngredientId());
-//        RecipeIngredient newRecipeIngredient = new RecipeIngredient(
-//                form.getAmount(),
-//                theUnit,
-//                theIngredient,
-//                recipe
-//        );
-//        recipeIngredientDao.save(newRecipeIngredient);
-//
-//        // save it to Recipe
-//        recipe.addIngredient(newRecipeIngredient);
-//        recipeDao.save(recipe);
-//        return "redirect:/mealplan/view/" + recipe.getId();
-//    }
+
+    @RequestMapping(value = "add", method = RequestMethod.POST)
+    public String processAddMealPlanForm(@ModelAttribute @Valid MealPlan newMealPlan,
+                                     Errors errors, Model model) {
+
+        if (errors.hasErrors()) {
+            model.addAttribute("title", "Add Meal Plan");
+            return "mealplan/add";
+        }
+
+        mealPlanDao.save(newMealPlan);
+
+        return "redirect:view/" + newMealPlan.getId();
+    }
+
+    // TODO - recipes/edit/{id}/add-recipe
+    @RequestMapping(value = "add-recipe/{id}", method = RequestMethod.GET)
+    public String addRecipeForm(Model model, @PathVariable("id") int id) {
+
+        MealPlan mealPlan =  mealPlanDao.findOne(id);
+
+        AddRecipeForm form = new AddRecipeForm(recipeDao.findAll(), mealPlan);
+
+        model.addAttribute("title", "Add Recipe to MealPlan: " + mealPlan.getName());
+        model.addAttribute("form", form);
+
+        return "mealplan/add-recipe";
+    }
+
+    @RequestMapping(value = "add-recipe", method = RequestMethod.POST)
+    public String processAddRecipeForm( Model model, @ModelAttribute @Valid AddRecipeForm form,
+                                        Errors errors) {
+
+        if (errors.hasErrors()) {
+            model.addAttribute("form", form);
+            return "mealplan/add-recipe";
+        }
+
+
+        Recipe aRecipe = recipeDao.findOne(form.getRecipeId());
+        MealPlan mealPlan = mealPlanDao.findOne(form.getMealplanId());
+
+        mealPlan.addRecipe(aRecipe);
+        mealPlanDao.save(mealPlan);
+        return "redirect:/mealplan/view/" + mealPlan.getId();
+    }
 
 
 
@@ -127,5 +119,26 @@ public class MealPlanController {
     // TODO - mealplan/edit/{id}/add-recipe
     // TODO - mealplan/edit/{id}/delete-recipe
     // TODO - mealplan/view/{id}/grocery-list
+
+    // View one Grocery List
+    @RequestMapping(value = "view/{id}/grocery-list", method = RequestMethod.GET)
+    public String viewGroceryList(Model model, @PathVariable("id") int id) {
+
+        MealPlan mealPlan =  mealPlanDao.findOne(id);
+
+        //TODO - make list of all ingredients
+        ArrayList<RecipeIngredient> recipeIngredients = new ArrayList<>();
+
+        for (Recipe arecipe : mealPlan.getRecipes()) {
+            recipeIngredients.addAll(arecipe.getRecipeIngredients());
+        }
+
+        model.addAttribute("title", "View MealPlan: " + mealPlan.getName());
+        model.addAttribute("recipes", mealPlan.getRecipes());
+        model.addAttribute("recipeIngredients", recipeIngredients);
+        model.addAttribute("mealplanId", mealPlan.getId());
+
+        return "mealplan/grocery-list";
+    }
 
 }

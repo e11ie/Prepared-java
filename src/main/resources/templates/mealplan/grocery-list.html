@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="fragments :: head"></head>
+
+<body>
+
+<div th:replace="fragments :: page-header"></div>
+
+<div class="container">
+
+    <h1 th:text="${title}">Default Title</h1>
+
+
+    <p th:unless="${recipeIngredients} and ${recipeIngredients.size()}">no ingredients added yet :(</p>
+
+    <ul>
+        <li th:each="recipeIngredient : ${recipeIngredients}">
+            <span th:text="${recipeIngredient.amount}"></span>
+            <span th:text="${recipeIngredient.unit.name}"></span>
+            <span th:text="${recipeIngredient.ingredient.name}"></span>
+        </li>
+    </ul>
+
+</div>
+
+</body>
+</html>
