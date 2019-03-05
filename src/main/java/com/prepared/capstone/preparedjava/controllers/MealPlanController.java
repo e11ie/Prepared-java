@@ -8,10 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -80,7 +77,22 @@ public class MealPlanController {
         return "redirect:view/" + newMealPlan.getId();
     }
 
-    // TODO - recipes/edit/{id}/add-recipe
+    @RequestMapping(value = "remove", method = RequestMethod.GET)
+    public String remove(Model model) {
+        model.addAttribute("mealplans", mealPlanDao.findAll());
+        model.addAttribute("title", "Remove Meal Plan");
+        return "mealplan/remove";
+    }
+
+    @RequestMapping(value = "remove", method = RequestMethod.POST)
+    public String remove(@RequestParam int mealplanId) {
+
+        mealPlanDao.delete(mealplanId);
+
+        return "redirect:/mealplan/all";
+    }
+
+
     @RequestMapping(value = "add-recipe/{id}", method = RequestMethod.GET)
     public String addRecipeForm(Model model, @PathVariable("id") int id) {
 
@@ -112,9 +124,37 @@ public class MealPlanController {
         return "redirect:/mealplan/view/" + mealPlan.getId();
     }
 
+    @RequestMapping(value = "remove-recipe/{id}", method = RequestMethod.GET)
+    public String removeRecipe(Model model, @PathVariable("id") int id) {
+
+        MealPlan mealPlan = mealPlanDao.findOne(id);
+        AddRecipeForm form = new AddRecipeForm(mealPlan.getRecipes(), mealPlan);
+
+        model.addAttribute("title", "Remove Recipe from MealPlan: " + mealPlan.getName());
+        model.addAttribute("form", form);
+
+        return "mealplan/remove-recipe";
+    }
+
+    @RequestMapping(value = "remove-recipe", method = RequestMethod.POST)
+    public String processRemoveRecipe(Model model, @ModelAttribute @Valid AddRecipeForm form,
+                                      Errors errors) {
+
+        if (errors.hasErrors()) {
+            model.addAttribute("form", form);
+            return "mealplan/remove-recipe";
+        }
 
 
-    // TODO - mealplan/delete
+        Recipe aRecipe = recipeDao.findOne(form.getRecipeId());
+        MealPlan mealPlan = mealPlanDao.findOne(form.getMealplanId());
+
+        mealPlan.removeRecipe(aRecipe);
+        mealPlanDao.save(mealPlan);
+        return "redirect:/mealplan/view/" + mealPlan.getId();
+    }
+
+
     // TODO - mealplan/edit/{id} - edit Title
     // TODO - mealplan/edit/{id}/add-recipe
     // TODO - mealplan/edit/{id}/delete-recipe

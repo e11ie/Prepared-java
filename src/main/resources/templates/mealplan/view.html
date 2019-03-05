@@ -10,7 +10,6 @@
 
     <h1 th:text="${title}">Default Title</h1>
 
-
     <p th:unless="${recipes} and ${recipes.size()}">no recipes added yet :(</p>
 
     <ul>
@@ -22,7 +21,8 @@
     </ul>
 
     <p><a th:href="'/mealplan/add-recipe/' + ${mealplanId}">Add Recipe</a></p>
-    <p><a th:href="'/mealplan/add-recipe/' + ${mealplanId} + '/grocery-list'">View Grocery List</a></p>
+    <p><a th:href="'/mealplan/remove-recipe/' + ${mealplanId}">Remove Recipe</a></p>
+    <p><a th:href="'/mealplan/view/' + ${mealplanId} + '/grocery-list'">View Grocery List</a></p>
 
 
     <!--TODO: Add  TOTAL Ingredient Count for ALL recipes-->
